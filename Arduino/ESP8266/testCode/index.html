@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Sensor Data</title>
+</head>
+<body>
+  <h1>Real-time Sensor Data</h1>
+  <p>Temperature: <span id="temperature">--</span>°C</p>
+  <p>Humidity: <span id="humidity">--</span>%</p>
+
+  <script>
+    var socket = new WebSocket('ws://' + '192.168.4.1' + ':81/websocket');
+
+    socket.onopen = function(event) {
+      console.log('WebSocket connection established.');
+    };
+
+    socket.onmessage = function(event) {
+      var data = JSON.parse(event.data);
+      document.getElementById('temperature').innerText = data.temperature.toFixed(1);
+      document.getElementById('humidity').innerText = data.humidity.toFixed(1);
+    };
+
+    socket.onclose = function(event) {
+      console.log('WebSocket connection closed.');
+    };
+  </script>
+</body>
+</html>
